@@ -21,6 +21,29 @@
             <div class="songName">{{item.name}}</div>
         </div>
     </div>
+    <div class="cos" v-if="COSShow">
+        <img src="./img/cos/0.jpg" alt="cos" style="width: 100%;height: 100%">
+        <img src="./img/cos/1.jpg" alt="cos" style="width: 100%;height: 100%">
+        <img src="./img/cos/2.jpg" alt="cos" style="width: 100%;height: 100%">
+        <img src="./img/cos/3.jpg" alt="cos" style="width: 100%;height: 100%">
+        <img src="./img/cos/4.jpg" alt="cos" style="width: 100%;height: 100%">
+    </div>
+    <div class="bottom">
+        <el-button type="primary" @click="dialogVisible = true">点击看N妹</el-button>
+    </div>
+    <el-dialog
+            v-model="dialogVisible"
+            title="你先发个誓"
+            width="230"
+    >
+        <span>我发誓：以后不会在群里拷打春希,如有违背天打雷劈。</span>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button @click="disagree">我拒绝</el-button>
+                <el-button type="primary" @click="lookCOS">我同意</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </div>
 <script>
     const songList = songlist;
@@ -28,7 +51,9 @@
         data() {
             return {
                 songList,
-                singState: false
+                singState: false,
+                dialogVisible: false,
+                COSShow: false
             };
         },
         computed: {
@@ -45,6 +70,17 @@
             }
         },
         methods: {
+            disagree() {
+            //     关掉整个页面 退回到上一页
+                window.close();
+            },
+            handleClose(done) {
+
+            },
+            lookCOS(){
+                this.COSShow = true;
+                this.dialogVisible = false;
+            },
             playVoice(item) {
                 if(this.singState){
                     this.$message({
@@ -116,6 +152,12 @@
     }
     #app {
         background-color: #F5F5F5;
+    }
+    .bottom{
+        position: absolute;
+        bottom: 10;
+        width: 100%;
+        text-align: center;
     }
 </style>
 </body>
