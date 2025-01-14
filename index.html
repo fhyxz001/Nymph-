@@ -53,7 +53,10 @@
                     });
                     return;
                 }
-                const audio = new Audio(`/content/${item.fileName}.mp3`);
+                let url = `/content/${item.fileName}.mp3`
+                const audio = new Audio(`${url}`);
+                audio.crossOrigin = "anonymous"; // 允许跨域资源加载
+                audio.src = "https://fhyxz001.github.io/Nymph-/content/"+`${item.fileName}`+".mp3";
                 audio.play();
                 this.singState = true;
                 //根据item.time来设置定时器，time是秒数，结束后singState变为false
