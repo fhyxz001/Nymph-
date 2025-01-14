@@ -1,6 +1,4 @@
 songlist = [
-    {fileName: "八嘎八嘎汉堡嘎-2"
-    },
     {fileName: "迪迦主题曲日语版-59"
     },
     {fileName: "干物妹小埋-53"
