@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-plus"></script>
+    <title>Nymphβ</title>
+<!--    引入./songlist-->
+    <script src="./songlist.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="chatbox" v-for="item in handleSongList" @click="playVoice(item)">
+        <div class="chatboxImg"></div>
+        <div class="chatboxVoice">
+            <div class="chatboxNum">{{item.time}}</div>
+            <div class="songName">{{item.name}}</div>
+        </div>
+    </div>
+</div>
+<script>
+    const songList = songlist;
+    const App = {
+        data() {
+            return {
+                songList,
+                singState: false
+            };
+        },
+        computed: {
+            // songList 是类似[{fileName}]的结构，取出其中的fileName,根据-分割，第一个是name，第二个是time
+            handleSongList() {
+                return this.songList.map(item => {
+                    const [name, time] = item.fileName.split("-");
+                    return {
+                        ...item,
+                        name,
+                        time
+                    };
+                });
+            }
+        },
+        methods: {
+            playVoice(item) {
+                if(this.singState){
+                    this.$message({
+                        message: '等N老师唱完',
+                        type: 'warning'
+                    });
+                    return;
+                }
+                const audio = new Audio(`/content/${item.fileName}.mp3`);
+                audio.play();
+                this.singState = true;
+                //根据item.time来设置定时器，time是秒数，结束后singState变为false
+                if(item.time){
+                    setTimeout(() => {
+                        this.singState = false;
+                    }, item.time * 1000);
+                }
+            }
+        }
+    };
+    const app = Vue.createApp(App);
+    app.use(ElementPlus);
+    app.mount("#app");
+</script>
+<style>
+    .songName{
+    /*    居于右下角*/
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        font-size: 13px;
+        color: #949494;
+    /*    斜体*/
+        font-style: italic;
+    }
+    .chatbox {
+        margin-top: 5px;
+        width: 100%;
+        display: flex;
+    }
+    .chatboxImg {
+        /*本地img目录下的avatar.jpg*/
+        background-image: url(./img/avatar.jpg);
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 80px;
+        height: 80px;
+    }
+    .chatboxNum{
+        font-size: 24px;
+        color: #5b5b5b;
+        position: absolute;
+        top: 50%;
+        left: 34%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+    }
+    .chatboxVoice {
+        background-image:url(./img/chatbg.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 35vh;
+        height: 80px;
+        position: relative;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    #app {
+        background-color: #F5F5F5;
+    }
+</style>
+</body>
+</html>
